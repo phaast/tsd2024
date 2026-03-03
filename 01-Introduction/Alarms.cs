@@ -10,7 +10,21 @@ public class Alarms
 {
 	public int countAlarms(int[] volume, int S)
 	{
-        return default(int);
+		int count = 0;
+
+		while (true)
+		{
+			foreach(int v in volume)
+			{
+				count++;
+				S -= v;
+				
+				if (S <= 0)
+				{
+					return count;
+				}
+			}
+		}
 	}
 
 	#region Testing code
