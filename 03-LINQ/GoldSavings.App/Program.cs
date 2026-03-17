@@ -62,6 +62,10 @@ class Program
         var top3OfSecondTenPrices2019To2022 = analysisService.GetTop3OfSecondTenPrices2019To2022();
         GoldResultPrinter.PrintPrices(top3OfSecondTenPrices2019To2022, "TOP 3 Second Ten Prices (2019-2022)");
 
+        // 2.d
+        var yearlyAverages = analysisService.GetYearlyAveragesFor2020_2023_2024();
+        GoldResultPrinter.PrintYearlyAverages(yearlyAverages, "Average gold prices for years: 2020, 2023, 2024");
+
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
     }
 }

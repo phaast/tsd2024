@@ -13,6 +13,7 @@ namespace GoldSavings.App.Services
         {
             _goldPrices = goldPrices;
         }
+
         public double GetAveragePrice()
         {
             return _goldPrices.Average(p => p.Price);
@@ -88,6 +89,16 @@ namespace GoldSavings.App.Services
                 .Skip(10)
                 .Take(3)
                 .ToList();
+        }
+
+        public List<(int Year, double AveragePrice)> GetYearlyAveragesFor2020_2023_2024()
+        {
+            var query = from p in _goldPrices 
+                where p.Date.Year == 2020 || p.Date.Year == 2023 || p.Date.Year == 2024
+                group p by p.Date.Year into yearGroup
+                select (Year: yearGroup.Key, AveragePrice: yearGroup.Average(x => x.Price));
+
+            return query.ToList();
         }
     }
 }

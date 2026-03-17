@@ -19,5 +19,14 @@ namespace GoldSavings.App.Services
         {
             Console.WriteLine($"\n{title}: {value}");
         }
+
+        public static void PrintYearlyAverages(List<(int Year, double AveragePrice)> averages, string title)
+        {
+            Console.WriteLine($"\n--- {title} ---");
+            foreach (var avg in averages)
+            {
+                Console.WriteLine($"{avg.Year} - {Math.Round(avg.AveragePrice, 2)} PLN");
+            }
+        }
     }
 }
