@@ -13,9 +13,109 @@ namespace GoldSavings.App.Services
         {
             _goldPrices = goldPrices;
         }
+
         public double GetAveragePrice()
         {
             return _goldPrices.Average(p => p.Price);
+        }
+
+        public List<GoldPrice> GetTop3HighestPricesLastYear_Method()
+        {
+            var lastYear = DateTime.Now.AddYears(-1);
+            return _goldPrices
+                .Where(p => p.Date >= lastYear)
+                .OrderByDescending(p => p.Price)
+                .Take(3)
+                .ToList();
+        }
+
+        public List<GoldPrice> GetTop3LowestPricesLastYear_Method()
+        {
+            var lastYear = DateTime.Now.AddYears(-1);
+            return _goldPrices
+                .Where(p => p.Date >= lastYear)
+                .OrderBy(p => p.Price)
+                .Take(3)
+                .ToList();
+        }
+
+        public List<GoldPrice> GetTop3HighestPricesLastYear_Query()
+        {
+            var lastYear = DateTime.Now.AddYears(-1);
+            var query = from p in _goldPrices
+                        where p.Date >= lastYear
+                        orderby p.Price descending
+                        select p;
+
+            return query.Take(3).ToList();
+        }
+
+        public List<GoldPrice> GetTop3LowestPricesLastYear_Query()
+        {
+            var lastYear = DateTime.Now.AddYears(-1);
+            var query = from p in _goldPrices
+                        where p.Date >= lastYear
+                        orderby p.Price
+                        select p;
+
+            return query.Take(3).ToList();
+        }
+
+        public List<GoldPrice> GetDaysWithMoreThan5PercentProfitSinceJan2020()
+        {
+            var firstDayInJan2020 = _goldPrices
+                .Where(p => p.Date.Year == 2020 && p.Date.Month == 1)
+                .OrderBy(p => p.Date)
+                .FirstOrDefault();
+
+            if (firstDayInJan2020 == null)
+            {
+                return new List<GoldPrice>(); 
+            }
+
+            double purchasePrice = firstDayInJan2020.Price;
+            double targetPrice = purchasePrice * 1.05; 
+
+            return _goldPrices
+                .Where(p => p.Date > firstDayInJan2020.Date && p.Price > targetPrice)
+                .ToList();
+        }
+
+        public List<GoldPrice> GetTop3OfSecondTenPrices2019To2022()
+        {
+            return _goldPrices
+                .Where(p => p.Date.Year >= 2019 && p.Date.Year <= 2022)
+                .OrderByDescending(p => p.Price)
+                .Skip(10)
+                .Take(3)
+                .ToList();
+        }
+
+        public List<(int Year, double AveragePrice)> GetYearlyAveragesFor2020_2023_2024()
+        {
+            var query = from p in _goldPrices 
+                where p.Date.Year == 2020 || p.Date.Year == 2023 || p.Date.Year == 2024
+                group p by p.Date.Year into yearGroup
+                select (Year: yearGroup.Key, AveragePrice: yearGroup.Average(x => x.Price));
+
+            return query.ToList();
+        }
+
+        public (GoldPrice BuyDay, GoldPrice SellDay, double ROI) GetBestInvestmentPeriod2020To2024()
+        {
+            var periodPrices = _goldPrices
+                .Where(p => p.Date.Year >= 2020 && p.Date.Year <= 2024)
+                .ToList();
+
+            var bestTrade = (from buy in periodPrices
+                            from sell in periodPrices
+                            where buy.Date < sell.Date
+                            let profit = sell.Price - buy.Price
+                            let roi = (profit / buy.Price) * 100
+                            orderby roi descending
+                            select (BuyDay: buy, SellDay: sell, ROI: roi)).FirstOrDefault();
+
+            return bestTrade;
         }
     }
 }
