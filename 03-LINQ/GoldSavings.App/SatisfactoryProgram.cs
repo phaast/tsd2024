@@ -45,7 +45,7 @@ public class RandomCollection<T>
 
 class SatisfactoryProgram
 {
-    static void Main(string[] args)
+    static void OldMain(string[] args)
     {
         // --------TASK 1: Lambda Leap Year--------
 
