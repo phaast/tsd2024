@@ -100,5 +100,22 @@ namespace GoldSavings.App.Services
 
             return query.ToList();
         }
+
+        public (GoldPrice BuyDay, GoldPrice SellDay, double ROI) GetBestInvestmentPeriod2020To2024()
+        {
+            var periodPrices = _goldPrices
+                .Where(p => p.Date.Year >= 2020 && p.Date.Year <= 2024)
+                .ToList();
+
+            var bestTrade = (from buy in periodPrices
+                            from sell in periodPrices
+                            where buy.Date < sell.Date
+                            let profit = sell.Price - buy.Price
+                            let roi = (profit / buy.Price) * 100
+                            orderby roi descending
+                            select (BuyDay: buy, SellDay: sell, ROI: roi)).FirstOrDefault();
+
+            return bestTrade;
+        }
     }
 }

@@ -66,6 +66,10 @@ class Program
         var yearlyAverages = analysisService.GetYearlyAveragesFor2020_2023_2024();
         GoldResultPrinter.PrintYearlyAverages(yearlyAverages, "Average gold prices for years: 2020, 2023, 2024");
 
+        // 2.e
+        var bestInvestment = analysisService.GetBestInvestmentPeriod2020To2024();
+        GoldResultPrinter.PrintInvestmentResult(bestInvestment, "Best investment in 2020-2024");
+
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
     }
 }
