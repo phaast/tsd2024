@@ -77,5 +77,12 @@ class Program
         GoldXmlExport xmlExporter = new GoldXmlExport();
         string xmlFileName = "gold_prices.xml";
         xmlExporter.ExportToXml(goldPrices, xmlFileName);
+
+        // --------4. Reading from XML--------
+
+        GoldXmlImport xmlImporter = new GoldXmlImport();
+        List<GoldPrice> importedPrices = xmlImporter.ImportFromXml(xmlFileName);
+
+        Console.WriteLine($"\nSuccessfully imported {importedPrices.Count} records from XML.");
     }
 }
