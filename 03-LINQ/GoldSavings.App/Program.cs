@@ -24,7 +24,7 @@ class Program
 
         Console.WriteLine($"Retrieved {goldPrices.Count} records. Ready for analysis.");
 
-        // --------Analysis--------
+        // --------2. Analysis--------
 
         GoldAnalysisService analysisService = new GoldAnalysisService(goldPrices);
         
@@ -71,5 +71,11 @@ class Program
         GoldResultPrinter.PrintInvestmentResult(bestInvestment, "Best investment in 2020-2024");
 
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
+
+        // --------3. Saving to XML--------
+
+        GoldXmlExport xmlExporter = new GoldXmlExport();
+        string xmlFileName = "gold_prices.xml";
+        xmlExporter.ExportToXml(goldPrices, xmlFileName);
     }
 }
