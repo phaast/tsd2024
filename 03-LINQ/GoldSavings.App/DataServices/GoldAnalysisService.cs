@@ -59,5 +59,25 @@ namespace GoldSavings.App.Services
 
             return query.Take(3).ToList();
         }
+
+        public List<GoldPrice> GetDaysWithMoreThan5PercentProfitSinceJan2020()
+        {
+            var firstDayInJan2020 = _goldPrices
+                .Where(p => p.Date.Year == 2020 && p.Date.Month == 1)
+                .OrderBy(p => p.Date)
+                .FirstOrDefault();
+
+            if (firstDayInJan2020 == null)
+            {
+                return new List<GoldPrice>(); 
+            }
+
+            double purchasePrice = firstDayInJan2020.Price;
+            double targetPrice = purchasePrice * 1.05; 
+
+            return _goldPrices
+                .Where(p => p.Date > firstDayInJan2020.Date && p.Price > targetPrice)
+                .ToList();
+        }
     }
 }

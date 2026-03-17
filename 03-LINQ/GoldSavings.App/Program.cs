@@ -45,7 +45,19 @@ class Program
         var top3lowestQuery = analysisService.GetTop3LowestPricesLastYear_Query();
         GoldResultPrinter.PrintPrices(top3lowestQuery, "TOP 3 lowest prices last year (Query)");
 
-        
+        // 2.b
+        var profitableDays = analysisService.GetDaysWithMoreThan5PercentProfitSinceJan2020();
+        bool isPossibleToProfit5Pc = profitableDays.Any();
+        Console.WriteLine($"\nIs it possible that they would have earned more than 5%? {(isPossibleToProfit5Pc ? "Yes" : "No")}");
+
+        if (isPossibleToProfit5Pc)
+        {
+            Console.WriteLine($"Days with > 5% profit: {profitableDays.Count}");
+
+            var first10ProfitableDays = profitableDays.Take(10).ToList();
+            GoldResultPrinter.PrintPrices(first10ProfitableDays, "First 10 days with > 5% profit");
+        }
+
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
     }
 }
