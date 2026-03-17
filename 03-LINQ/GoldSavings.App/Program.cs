@@ -24,7 +24,7 @@ class Program
 
         Console.WriteLine($"Retrieved {goldPrices.Count} records. Ready for analysis.");
 
-        // Analysis
+        // --------Analysis--------
 
         GoldAnalysisService analysisService = new GoldAnalysisService(goldPrices);
         
@@ -33,11 +33,17 @@ class Program
         GoldResultPrinter.PrintSingleValue(Math.Round(avgPrice, 2), "Average Gold Price Last Half Year");
 
         // 2.a
-        var top3highest = analysisService.GetTop3HighestPricesLastYear();
-        GoldResultPrinter.PrintPrices(top3highest, "TOP 3 highest prices last year");
+        var top3highestMethod = analysisService.GetTop3HighestPricesLastYear_Method();
+        GoldResultPrinter.PrintPrices(top3highestMethod, "TOP 3 highest prices last year (Method)");
 
-        var top3lowest = analysisService.GetTop3LowestPricesLastYear();
-        GoldResultPrinter.PrintPrices(top3lowest, "TOP 3 lowest prices last year");
+        var top3lowestMethod = analysisService.GetTop3LowestPricesLastYear_Method();
+        GoldResultPrinter.PrintPrices(top3lowestMethod, "TOP 3 lowest prices last year (Method)");
+
+        var top3highestQuery = analysisService.GetTop3HighestPricesLastYear_Query();
+        GoldResultPrinter.PrintPrices(top3highestQuery, "TOP 3 highest prices last year (Query)");
+
+        var top3lowestQuery = analysisService.GetTop3LowestPricesLastYear_Query();
+        GoldResultPrinter.PrintPrices(top3lowestQuery, "TOP 3 lowest prices last year (Query)");
 
         
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");

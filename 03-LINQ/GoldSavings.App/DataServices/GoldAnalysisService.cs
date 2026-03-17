@@ -18,7 +18,7 @@ namespace GoldSavings.App.Services
             return _goldPrices.Average(p => p.Price);
         }
 
-        public List<GoldPrice> GetTop3HighestPricesLastYear()
+        public List<GoldPrice> GetTop3HighestPricesLastYear_Method()
         {
             var lastYear = DateTime.Now.AddYears(-1);
             return _goldPrices
@@ -28,7 +28,7 @@ namespace GoldSavings.App.Services
                 .ToList();
         }
 
-        public List<GoldPrice> GetTop3LowestPricesLastYear()
+        public List<GoldPrice> GetTop3LowestPricesLastYear_Method()
         {
             var lastYear = DateTime.Now.AddYears(-1);
             return _goldPrices
@@ -36,6 +36,28 @@ namespace GoldSavings.App.Services
                 .OrderBy(p => p.Price)
                 .Take(3)
                 .ToList();
+        }
+
+        public List<GoldPrice> GetTop3HighestPricesLastYear_Query()
+        {
+            var lastYear = DateTime.Now.AddYears(-1);
+            var query = from p in _goldPrices
+                        where p.Date >= lastYear
+                        orderby p.Price descending
+                        select p;
+
+            return query.Take(3).ToList();
+        }
+
+        public List<GoldPrice> GetTop3LowestPricesLastYear_Query()
+        {
+            var lastYear = DateTime.Now.AddYears(-1);
+            var query = from p in _goldPrices
+                        where p.Date >= lastYear
+                        orderby p.Price
+                        select p;
+
+            return query.Take(3).ToList();
         }
     }
 }
