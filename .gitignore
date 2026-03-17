@@ -59,3 +59,7 @@ nunit-*.xml
 .fake
 
 .vscode
+
+03-LINQ/Excellent-1/node_modules
+03-LINQ/Excellent-1/package*
+03-LINQ/Excellent-1/*.js
