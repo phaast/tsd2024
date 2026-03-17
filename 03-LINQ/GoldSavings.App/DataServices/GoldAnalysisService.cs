@@ -79,5 +79,15 @@ namespace GoldSavings.App.Services
                 .Where(p => p.Date > firstDayInJan2020.Date && p.Price > targetPrice)
                 .ToList();
         }
+
+        public List<GoldPrice> GetTop3OfSecondTenPrices2019To2022()
+        {
+            return _goldPrices
+                .Where(p => p.Date.Year >= 2019 && p.Date.Year <= 2022)
+                .OrderByDescending(p => p.Price)
+                .Skip(10)
+                .Take(3)
+                .ToList();
+        }
     }
 }

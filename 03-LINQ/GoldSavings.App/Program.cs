@@ -58,6 +58,10 @@ class Program
             GoldResultPrinter.PrintPrices(first10ProfitableDays, "First 10 days with > 5% profit");
         }
 
+        // 2.c 
+        var top3OfSecondTenPrices2019To2022 = analysisService.GetTop3OfSecondTenPrices2019To2022();
+        GoldResultPrinter.PrintPrices(top3OfSecondTenPrices2019To2022, "TOP 3 Second Ten Prices (2019-2022)");
+
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
     }
 }
