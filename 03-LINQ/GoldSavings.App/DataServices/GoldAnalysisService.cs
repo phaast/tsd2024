@@ -27,5 +27,15 @@ namespace GoldSavings.App.Services
                 .Take(3)
                 .ToList();
         }
+
+        public List<GoldPrice> GetTop3LowestPricesLastYear()
+        {
+            var lastYear = DateTime.Now.AddYears(-1);
+            return _goldPrices
+                .Where(p => p.Date >= lastYear)
+                .OrderBy(p => p.Price)
+                .Take(3)
+                .ToList();
+        }
     }
 }

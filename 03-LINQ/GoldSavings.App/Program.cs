@@ -13,6 +13,7 @@ class Program
         GoldDataService dataService = new GoldDataService();
         DateTime startDate = new DateTime(2019, 01, 01);
         DateTime endDate = DateTime.Now;
+
         List<GoldPrice> goldPrices = dataService.GetGoldPrices(startDate, endDate).GetAwaiter().GetResult();
 
         if (goldPrices == null || goldPrices.Count == 0)
@@ -23,7 +24,6 @@ class Program
 
         Console.WriteLine($"Retrieved {goldPrices.Count} records. Ready for analysis.");
 
-
         // Analysis
 
         GoldAnalysisService analysisService = new GoldAnalysisService(goldPrices);
@@ -33,8 +33,12 @@ class Program
         GoldResultPrinter.PrintSingleValue(Math.Round(avgPrice, 2), "Average Gold Price Last Half Year");
 
         // 2.a
-        var top3 = analysisService.GetTop3HighestPricesLastYear();
-        GoldResultPrinter.PrintPrices(top3, "TOP 3 highest prices last year");
+        var top3highest = analysisService.GetTop3HighestPricesLastYear();
+        GoldResultPrinter.PrintPrices(top3highest, "TOP 3 highest prices last year");
+
+        var top3lowest = analysisService.GetTop3LowestPricesLastYear();
+        GoldResultPrinter.PrintPrices(top3lowest, "TOP 3 lowest prices last year");
+
         
         Console.WriteLine("\nGold Analyis Queries with LINQ Completed.");
     }
