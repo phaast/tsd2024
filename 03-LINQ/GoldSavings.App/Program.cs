@@ -1,6 +1,10 @@
 ﻿using GoldSavings.App.Model;
 using GoldSavings.App.Client;
 using GoldSavings.App.Services;
+
+using System.Diagnostics;
+using System.Text.Json;
+
 namespace GoldSavings.App;
 
 class Program
@@ -27,7 +31,7 @@ class Program
         // --------2. Analysis--------
 
         GoldAnalysisService analysisService = new GoldAnalysisService(goldPrices);
-        
+
         // Example
         var avgPrice = analysisService.GetAveragePrice();
         GoldResultPrinter.PrintSingleValue(Math.Round(avgPrice, 2), "Average Gold Price Last Half Year");
@@ -84,5 +88,43 @@ class Program
         List<GoldPrice> importedPrices = xmlImporter.ImportFromXml(xmlFileName);
 
         Console.WriteLine($"\nSuccessfully imported {importedPrices.Count} records from XML.");
+
+        Console.WriteLine("\nRunning external query in Python...");
+
+        string tempJsonFile = "temp_gold_data.json";
+        string jsonString = JsonSerializer.Serialize(goldPrices);
+        File.WriteAllText(tempJsonFile, jsonString);
+
+        try
+        {
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = "python3",
+                Arguments = $"query.py {tempJsonFile}",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                CreateNoWindow = true
+            };
+
+            using (Process process = Process.Start(startInfo))
+            {
+                using (StreamReader reader = process.StandardOutput)
+                {
+                    string resultFromPython = reader.ReadToEnd();
+                    Console.WriteLine(resultFromPython);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Failed to run Python script: {ex.Message}");
+        }
+        finally
+        {
+            if (File.Exists(tempJsonFile))
+            {
+                File.Delete(tempJsonFile);
+            }
+        }
     }
 }
